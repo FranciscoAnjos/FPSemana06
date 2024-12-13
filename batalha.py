@@ -10,18 +10,29 @@ class Personagem:
         inimigo.vida -= self.ataque
         print(f"{self.nome} Ataca {inimigo.nome} e Causa {self.ataque} de Dano!")
 
+    def especial(self, *args):
+        pass
+
     def __str__(self):
         return f"{self.nome} {self.vida}"
 
 class Guerreiro(Personagem):
-    pass
-
+    def especial(self, enemy):
+        total_dmg = self.ataque + 15
+        enemy.vida -= total_dmg
+        print(f"{self.nome} usa Golpe Poderoso em {enemy.nome} e Causa {total_dmg} de Dano!")
 
 class Mago(Personagem):
-    pass
+    def especial(self):
+        self.vida += 25
+        print(f"{self.nome} usa Cura e Ganha 25 Pontos de Vida!")
 
 class Arqueiro(Personagem):
-    pass
+    def especial(self, enemies):
+        for en in enemies:
+            if en != self:
+                en.vida -= 15
+        print(f"{self.nome} usa Chuva de Flechas e Causa 15 de Dano a Todos os Inimigos!")
 
 def importar_personagens(caminho):
     """
