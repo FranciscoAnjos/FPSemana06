@@ -14,49 +14,58 @@ class Personagem:
         return f"{self.nome} {self.vida}"
 
 class Guerreiro(Personagem):
-    def __init__(self, nome, vida, ataque):
-        super().__init__(nome, vida, ataque)
+    pass
 
-    def especial(self, inimigo):
-        inimigo.vida -=  self.ataque + 15
-        print(f"{self.nome} usa Golpe Poderoso em {inimigo.nome} e Causa {self.ataque + 15} de Dano!")
 
 class Mago(Personagem):
-    def __init__(self, nome, vida, ataque):
-        super().__init__(nome, vida, ataque)
-
-    def especial(self):
-        self.vida +=  25
-        print(f"{self.nome} usa Cura e Ganha {25} Pontos de Vida!")
+    pass
 
 class Arqueiro(Personagem):
-    def __init__(self, nome, vida, ataque):
-        super().__init__(nome, vida, ataque)
-
-    def especial(self, inimigos):
-        for inimigo in inimigos:
-            if inimigo != self:
-                inimigo.vida -= 15
-        print(f"{self.nome} usa Chuva de Flechas e Causa {15} de Dano a Todos os Inimigos!")
+    pass
 
 def importar_personagens(caminho):
-    with open(caminho, 'r') as file:
-        dados = json.load(file)
-
+    """
+        Função que importa personagens a partir de um ficheiro JSON.
+        O ficheiro contém uma lista de personagens com informações de nome, vida, ataque e classe.
+        - caminho: Caminho para o ficheiro JSON que contém os dados dos personagens.
+        Retorna:
+        - lista de personagens.
+        - quantidade total de personagens importados.
+    """
     personagens = []
 
-    for dado in dados:
-        if dado["classe"] == "Guerreiro":
-            personagens.append(Guerreiro(dado["nome"], dado["vida"], dado["ataque"]))
-        elif dado["classe"] == "Mago":
-            personagens.append(Mago(dado["nome"], dado["vida"], dado["ataque"]))
-        elif dado["classe"] == "Arqueiro":
-            personagens.append(Arqueiro(dado["nome"], dado["vida"], dado["ataque"]))
+    try:
+        with open(caminho, 'r') as f:
+            dados = json.load(f)
 
-    return personagens, len(personagens)
+            for personagem in dados:
+                classe = personagem['classe']
+                nome = personagem['nome']
+                vida = personagem['vida']
+                ataque = personagem['ataque']
+
+                if classe == "Guerreiro":
+                    personagens.append(Guerreiro(nome, vida, ataque))
+                elif classe == "Mago":
+                    personagens.append(Mago(nome, vida, ataque))
+                elif classe == "Arqueiro":
+                    personagens.append(Arqueiro(nome, vida, ataque))
+
+        return personagens, len(personagens)
+    except:
+        print("Erro ao ler personagens.json")
+        return
+
 
 def ordenar_personagens_por_vida(personagens):
+    """
+        Função que ordena a lista de personagens de acordo com os pontos de vida (do menor para o maior).
+        - personagens: Lista de personagens.
+        Retorna:
+        - lista de personagens ordenada por vida.
+    """
     return sorted(personagens, key=lambda p: p.vida)
+
 
 personagens, num_personagens = importar_personagens('personagens.json')
 print(f"{num_personagens} Personagens Entram em Batalha!")
